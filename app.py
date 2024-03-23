@@ -1,48 +1,54 @@
-import os
-import tensorflow as tf
-import numpy as np
-from tensorflow.keras.preprocessing import image
-from PIL import Image
-import cv2
-from keras.models import load_model
 from flask import Flask, request, render_template
 from werkzeug.utils import secure_filename
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
+from fileinput import filename
+import tensorflow as tf
+import os
+import numpy as np
+
 app = Flask(__name__)
 
-model =load_model('model.h5')
-print('Model loaded. Check http://127.0.0.1:5000/')
+upload_folder = os.path.join('static', 'uploads')
+app.config['UPLOAD'] = upload_folder
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
-labels = {0: 'Healthy', 1: 'Powdery', 2: 'Rust'}
-
-
-def getResult(image_path):
-    img = load_img(image_path, target_size=(225,225))
-    x = img_to_array(img)
-    x = x.astype('float32') / 255.
-    x = np.expand_dims(x, axis=0)
-    predictions = model.predict(x)[0]
+def predict_image(img_path):
+    model = tf.keras.models.load_model('model.h5')
+    img = tf.keras.preprocessing.image.load_img(img_path, target_size=(256, 256))
+    img_array = tf.keras.preprocessing.image.img_to_array(img)
+    img_array = tf.expand_dims(img_array, 0)
+    # img_np = np.array(img)
+    predictions = model.predict(img_array)
+    score = tf.nn.softmax(predictions[0])
     return predictions
 
 
-@app.route('/', methods=['GET'])
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# rendering index page
+@app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
 
-@app.route('/predict', methods=['GET', 'POST'])
+@app.route('/predict', methods=['POST'])
 def upload():
-    if request.method == 'POST':
-        f = request.files['file']
+    if request.method == 'POST':   
+        f = request.files['img']
+        # Rerender Index page if no file is selected
+        if f.filename == '':
+            return render_template("index.html", error="No file selected. Please upload an image file.")
 
-        basepath = os.path.dirname(__file__)
-        file_path = os.path.join(
-            basepath, 'uploads', secure_filename(f.filename))
-        f.save(file_path)
-        predictions=getResult(file_path)
-        predicted_label = labels[np.argmax(predictions)]
-        return str(predicted_label)
-    return None
+        if f and allowed_file(f.filename):
+            filename = secure_filename(f.filename)
+            f.save(os.path.join(app.config['UPLOAD'], filename))
+            img1 = os.path.join(app.config['UPLOAD'], filename)
+            score = predict_image(img1)
+            return render_template('import.html',filename=filename, img=img1, score=score)
+        else:
+            return render_template('index.html', error="Invalid file format. Please upload a valid image file.")
+    return render_template('import.html')
 
 
 if __name__ == '__main__':
