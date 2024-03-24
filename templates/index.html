@@ -1,25 +1,58 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <title>Plant Disease Detection</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Plant Disease Classification Using Deep Learning</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/leaf-icon.png') }}">
 </head>
 
 <body>
     <nav class="navbar navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Plant Disease Classification Using Deep Learning</a>
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='assets/leaf-icon.png') }}" alt="Logo" width="30" height="24"
+                    class="d-inline-block align-text-top">
+                Leaf Disease Classification
+            </a>
         </div>
     </nav>
-    <div>
-        <h1>Upload Image</h1>
+
+    <div class="content">
+        <h1>Plant Disease Classification Using Deep Learning</h1>
+        <p>This project was made by Parth Dedhia, undergrad student at VIT-C 2025 batch, as a project
+            for Machine Vision.</p>
+        <br>
+        <h3>Introduction</h3>
+        <p>
+            This project uses a Convolutional Neural Network to classify the disease in a leaf image. The model was
+            trained on the PlantVillage dataset, which contains images of diseased and healthy leaves of various plants.
+            The model was trained on a GPU for 15 epochs and achieved an accuracy of 97.5% on the test set.
+        </p>
+        <h3>Upload Image</h3>
         <form action="/predict" method="post" enctype="multipart/form-data">
-            <input type="file" name="img" />
-            <input type="submit" value="Upload">
+            <label for="fileinp">Enter the image of the diseased leaf here:</label>
+            <input type="file" class="form-control" id="fileinp" name="img" />
+            <br>
+            <input type="submit" class="btn btn-primary" value="Upload">
         </form>
-        <h1>{{ error }}</h1>
+
+        {% if error %}
+        <div class="alert alert-warning" role="alert">
+            {{error}}
+        </div>
+        {% endif %}
+
     </div>
+
+    <footer class="text-center bg-body-tertiary">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+            Made with 💖by Aneesh Raskar © 2024 Copyright
+        </div>
+    </footer>
 </body>
 
 </html>
