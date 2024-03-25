@@ -6,6 +6,7 @@ import os
 import numpy as np
 
 app = Flask(__name__)
+class_name=['Potato___Early_blight', 'Potato___Late_blight', 'Potato___healthy']
 
 upload_folder = os.path.join('static', 'uploads')
 app.config['UPLOAD'] = upload_folder
@@ -13,13 +14,13 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 def predict_image(img_path):
     model = tf.keras.models.load_model('model.h5')
-    img = tf.keras.preprocessing.image.load_img(img_path, target_size=(256, 256))
-    img_array = tf.keras.preprocessing.image.img_to_array(img)
-    img_array = tf.expand_dims(img_array, 0)
-    # img_np = np.array(img)
+    img = tf.keras.preprocessing.image.load_img(img_path)
+    img_array = tf.keras.preprocessing.image.img_to_array(img.numpy())
+    img_array = tf.expand_dims(img_array, 0) # Create a batch
     predictions = model.predict(img_array)
-    score = tf.nn.softmax(predictions[0])
-    return predictions
+    predicted_class = class_name[np.argmax(predictions[0])]
+    confidence = round(100 * (np.max(predictions[0])), 2)
+    return predicted_class, confidence
 
 
 def allowed_file(filename):
