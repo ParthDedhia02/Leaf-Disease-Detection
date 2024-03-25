@@ -22,9 +22,11 @@ def predict_image(img_path):
     print(predictions)
     if predictions.max() in predictions[0]:
         class_name = classes[predictions.argmax()]
-        score = predictions.max() * 100
+        score1 = round((predictions[0][0] * 100),2)
+        score2 = round((predictions[0][1] * 100),2)
+        score3 = round((predictions[0][2] * 100),2)
         print(class_name)
-    return class_name, score
+    return class_name, score1, score2, score3
 
 # Function to copy an image from the source path to the destination path
 def copy_image(source_path):
@@ -60,7 +62,7 @@ def upload():
         f = request.files['img']
         # Rerender Index page if no file is selected
         if f.filename == '':
-            return render_template("index.html", error="No file selected. Please upload an image file.")
+            return render_template("index.html", error="Error: No file selected. Please upload an image file.")
 
         if f and allowed_file(f.filename):
             filename = secure_filename(f.filename)
@@ -73,12 +75,12 @@ def upload():
             else:
                 print("Failed to copy image.")
 
-            Class, score = predict_image(img1)
+            Class, score1, score2, score3 = predict_image(img1)
             img_print = os.path.join(app.config['UPLOAD'], 'copied_image.jpg')
             os.remove(img1)
-            return render_template('import.html',filename=filename, img=img_print, Class = Class, score=score)
+            return render_template('import.html', img=img_print, Class = Class, score1=score1, score2=score2, score3=score3)
         else:
-            return render_template('index.html', error="Invalid file format. Please upload a valid image file.")
+            return render_template('index.html', error="Error: Invalid file format. Please upload a valid image file.")
     
 
 
