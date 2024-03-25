@@ -6,6 +6,7 @@ import os
 from PIL import Image
 
 app = Flask(__name__)
+class_name=['Potato___Early_blight', 'Potato___Late_blight', 'Potato___healthy']
 
 upload_folder = os.path.join('static', 'uploads')
 app.config['UPLOAD'] = upload_folder
