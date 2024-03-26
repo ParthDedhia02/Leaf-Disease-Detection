@@ -13,7 +13,7 @@
 <body>
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
                 <img src="{{ url_for('static', filename='assets/leaf-icon.png') }}" alt="Logo" width="30" height="24"
                     class="d-inline-block align-text-top">
                 Leaf Disease Classification
@@ -25,6 +25,7 @@
         <div class="alert alert-success" role="alert">
             File Uploaded Successfully!
         </div>
+        <h5>Confidence Table:</h5>
         <table class="table table-striped table-dark">
             <thead>
                 <tr>
@@ -43,13 +44,48 @@
                 </tr>
             </tbody>
         </table>
-        <p>Predicted Disease: {{Class}}</p>
-        <h3>Given Image:</h3>
-        <img src="{{img}}">
-        {% else %}
-        <h1>Image not rendered</h1>
-        {% endif %}
+
+        <div class="card cardbody" style=" width: 40rem; ;">
+            <img src="{{img}}" class="card-img-top" alt="Uploaded Image">
+            <div class="card-body">
+                <h5 class="card-title">{{Class}}</h5>
+                {% if Class == "Early Blight": %}
+                <p>Early blight is primarily a disease of stressed or senescing plants. Symptoms appear first on the
+                    oldest foliage. Affected leaves develop circular to angular dark brown lesions 0.12 to 0.16 inch
+                    (3-4 mm) in diameter. Concentric rings often form in lesions to produce characteristic target-board
+                    effect.</p>
+                <a href="https://www.planetnatural.com/pest-problem-solver/plant-disease/early-blight/"
+                    class="btn btn-outline-info">Click here to find remedies</a>
+                {% elif Class == "Late Blight": %}
+                <p>Late blight is a disease which is common in solanaceous plants like potatoes, tomatoes, etc. It is
+                    caused by an oomycete pathogen, i.e., <i>Phytophthora infestans</i>. Late blight in a potato is a
+                    lethal
+                    disease which can have the potential to devastate the crop. It can attack the crop at any stage and
+                    can infect the foliage and tubers.</p>
+                <a href="https://www.planetnatural.com/pest-problem-solver/plant-disease/late-blight/"
+                    class="btn btn-outline-info">Click here to find remedies</a>
+                {% else %}
+                <p>The given image of the potato leaf is detected to be healthy thus it does not require any remedies.
+                </p>
+                {% endif %}
+            </div>
+        </div>
+
     </div>
+    {% else %}
+    <div class="alert alert-danger" role="alert">
+        Error: File Not Uploaded. Please try again.
+    </div>
+    {% endif %}
+
+    <!-- Go back to Home Page -->
+    <div class="return d-flex justify-content-center">
+        <form action="/" method="post" enctype="multipart/form-data">
+            <input type="submit" class="btn btn-primary" value="Upload Another Image">
+        </form>
+    </div>
+    </div>
+
 
     <footer class="text-center bg-body-tertiary">
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">

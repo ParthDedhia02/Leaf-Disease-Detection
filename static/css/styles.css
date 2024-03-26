@@ -1,5 +1,5 @@
 .content {
-    margin-top: 20px;
+    margin-top: 0px;
     margin-bottom: 20px;
     padding: 20px;
     background-color: #f8f9fa;
@@ -21,6 +21,12 @@ p {
     margin-bottom: 20px;
 }
 
+h5 {
+    font-family: 'Georgia', serif;
+    font-size: 2.5rem;
+    font-weight: 525;
+}
+
 h3 {
     font-family: 'Georgia', serif;
     font-size: 2.5rem;
@@ -33,3 +39,23 @@ h3 {
     margin: 0 auto;
 }
 
+.display-1{
+    height: 400px;
+    width: 400px;
+    border-radius: 15px;
+}
+
+.return{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(153, 149, 149, 0.1);
+}
+
+.cardbody{
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
