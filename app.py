@@ -83,5 +83,5 @@ def upload():
         else:
             return render_template('index.html', error="Error: Invalid file format. Please upload a valid image file.")
     
-
-
+if __name__ == '__main__':
+    app.run(debug=True)
