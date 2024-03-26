@@ -11,7 +11,7 @@ class_name=['Potato___Early_blight', 'Potato___Late_blight', 'Potato___healthy']
 upload_folder = os.path.join('static', 'uploads')
 app.config['UPLOAD'] = upload_folder
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-classes = ['Early blight', 'Late blight', 'healthy']
+classes = ['Early Blight', 'Late Blight', 'Healthy']
 
 # Function to predict the class of the image
 def predict_image(img_path):
@@ -52,7 +52,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # rendering index page
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
     return render_template("index.html")
 
@@ -85,5 +85,3 @@ def upload():
     
 
 
-if __name__ == '__main__':
-    app.run(debug=True)

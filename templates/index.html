@@ -13,7 +13,7 @@
 <body>
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
                 <img src="{{ url_for('static', filename='assets/leaf-icon.png') }}" alt="Logo" width="30" height="24"
                     class="d-inline-block align-text-top">
                 Leaf Disease Classification
@@ -37,7 +37,7 @@
             <label for="fileinp">Enter the image of the diseased leaf here:</label>
             <input type="file" class="form-control" id="fileinp" name="img" />
             <br>
-            <input type="submit" class="btn btn-primary" value="Upload">
+            <input type="submit" class="btn btn-primary" value="Predict">
         </form>
 
         {% if error %}
