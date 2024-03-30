@@ -32,7 +32,7 @@ def predict_image(img_path):
 def copy_image(source_path):
     try:
         source_image = Image.open(source_path)
-        source_image.save('./static/uploads/copied_image.jpg')
+        source_image.save('./static/uploads/copied.jpg')
         return True
     except Exception as e:
         print(f"Error: {e}")
@@ -73,7 +73,7 @@ def upload():
             split_tup = os.path.splitext(img1)
             extension = split_tup[1]
 
-            img_print = os.path.join(app.config['UPLOAD'], 'copied_image.jpg')
+            img_print = os.path.join(app.config['UPLOAD'], 'copied.jpg')
             os.remove(img1)
             print("Removed image successfully!")
             return render_template('import.html', img=img_print, Class = Class, score1=score1, score2=score2, score3=score3)
