@@ -22,29 +22,21 @@ def predict_image(img_path):
     predictions = model.predict(img_array)
     print(predictions)
     if predictions.max() in predictions[0]:
-        class_name = classes[predictions.argmax()]
+        class_cat = classes[predictions.argmax()]
         score1 = round((predictions[0][0] * 100),2)
         score2 = round((predictions[0][1] * 100),2)
         score3 = round((predictions[0][2] * 100),2)
-        print(class_name)
-    return class_name, score1, score2, score3
+    return class_cat, score1, score2, score3
 
 # Function to copy an image from the source path to the destination path
 def copy_image(source_path):
     try:
-        # Open the source image
         source_image = Image.open(source_path)
-        
-        # Create a copy of the source image
-        copied_image = source_image.copy()
-        
-        # Save the copied image to the destination path
-        copied_image.save("./static/uploads/copied_image.jpg")
-        
-        return True  # Return True if copying was successful
+        source_image.save('./static/uploads/copied_image.jpg')
+        return True
     except Exception as e:
         print(f"Error: {e}")
-        return False  # Return False if an error occurred
+        return False
 
 # Function to check if the file is allowed
 def allowed_file(filename):
@@ -69,7 +61,7 @@ def upload():
             filename = secure_filename(f.filename)
             f.save(os.path.join(app.config['UPLOAD'], filename))
             img1 = os.path.join(app.config['UPLOAD'], filename)
-            # Example usage
+
             source_path = img1
             if copy_image(source_path):
                 print("Image copied successfully!")
@@ -77,8 +69,13 @@ def upload():
                 print("Failed to copy image.")
 
             Class, score1, score2, score3 = predict_image(img1)
+
+            split_tup = os.path.splitext(img1)
+            extension = split_tup[1]
+
             img_print = os.path.join(app.config['UPLOAD'], 'copied_image.jpg')
             os.remove(img1)
+            print("Removed image successfully!")
             return render_template('import.html', img=img_print, Class = Class, score1=score1, score2=score2, score3=score3)
         else:
             return render_template('index.html', error="Error: Invalid file format. Please upload a valid image file.")
