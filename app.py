@@ -8,7 +8,7 @@ from PIL import Image
 app = Flask(__name__)
 class_name=['Potato___Early_blight', 'Potato___Late_blight', 'Potato___healthy']
 
-upload_folder = 'uploads'
+upload_folder = os.path.join('static', 'uploads')
 app.config['UPLOAD'] = upload_folder
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 classes = ['Early Blight', 'Late Blight', 'Healthy']
@@ -53,7 +53,7 @@ def copy_image(source_path):
 # Function to check if the file is allowed
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # rendering index page
 @app.route("/", methods=['GET', 'POST'])
@@ -76,7 +76,7 @@ def upload():
 
             source_path = img1
             if copy_image(source_path):
-                print("Image copied successfully!")
+                print("Image copied successfullys!")
             else:
                 print("Failed to copy image.")
 
@@ -93,4 +93,4 @@ def upload():
             return render_template('index.html', error="Error: Invalid file format. Please upload a valid image file.")
     
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
