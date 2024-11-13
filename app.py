@@ -8,10 +8,22 @@ from PIL import Image
 app = Flask(__name__)
 class_name=['Potato___Early_blight', 'Potato___Late_blight', 'Potato___healthy']
 
-upload_folder = os.path.join('static', 'uploads')
+upload_folder = 'uploads'
 app.config['UPLOAD'] = upload_folder
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 classes = ['Early Blight', 'Late Blight', 'Healthy']
+
+# Function to create uploads folder if it doesn't exist
+def create_uploads():
+    if not os.path.exists(upload_folder):
+        os.makedirs(upload_folder)
+        # Create a copied.jpg file in the uploads folder
+        copied_image_path = os.path.join(upload_folder, 'copied.jpg')
+        with open(copied_image_path, 'wb') as f:
+            f.write(b'')  # Create an empty file
+
+# Call the function to create the folder
+create_uploads()
 
 # Function to predict the class of the image
 def predict_image(img_path):
